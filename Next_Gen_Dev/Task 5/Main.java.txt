@@ -1,0 +1,78 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        CourseDatabase courseDatabase = new CourseDatabase();
+        StudentDatabase studentDatabase = new StudentDatabase();
+
+        // Sample data
+        courseDatabase.addCourse(new Course("CS101", "Intro to Computer Science", "Basic concepts of computer science.", 30));
+        courseDatabase.addCourse(new Course("MATH101", "Calculus I", "Introduction to calculus.", 25));
+        courseDatabase.addCourse(new Course("ENG101", "English Literature", "Study of English literature.", 20));
+
+        studentDatabase.addStudent(new Student("S001", "Alice"));
+        studentDatabase.addStudent(new Student("S002", "Bob"));
+
+        int choice;
+        do {
+            System.out.println("\n--- Course Registration System ---");
+            System.out.println("1. List Courses");
+            System.out.println("2. Register for a Course");
+            System.out.println("3. Drop a Course");
+            System.out.println("4. Exit");
+            System.out.print("Choose an option: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // consume newline
+
+            switch (choice) {
+                case 1:
+                    courseDatabase.listCourses();
+                    break;
+                case 2:
+                    System.out.print("Enter Student ID: ");
+                    String studentId = scanner.nextLine();
+                    Student student = studentDatabase.findStudent(studentId);
+                    if (student == null) {
+                        System.out.println("Student not found.");
+                        break;
+                    }
+                    System.out.print("Enter Course Code to register: ");
+                    String courseCode = scanner.nextLine();
+                    Course course = courseDatabase.findCourse(courseCode);
+                    if (course == null) {
+                        System.out.println("Course not found.");
+                    } else if (student.registerCourse(course)) {
+                        System.out.println("Registered for course: " + course.getTitle());
+                    } else {
+                        System.out.println("Course is full.");
+                    }
+                    break;
+                case 3:
+                    System.out.print("Enter Student ID: ");
+                    studentId = scanner.nextLine();
+                    student = studentDatabase.findStudent(studentId);
+                    if (student == null) {
+                        System.out.println("Student not found.");
+                        break;
+                    }
+                    System.out.print("Enter Course Code to drop: ");
+                    courseCode = scanner.nextLine();
+                    course = courseDatabase.findCourse(courseCode);
+                    if (course == null || !student.dropCourse(course)) {
+                        System.out.println("Failed to drop course. Ensure you are registered for it.");
+                    } else {
+                        System.out.println("Dropped course: " + course.getTitle());
+                    }
+                    break;
+                case 4:
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        } while (choice != 4);
+
+        scanner.close();
+    }
+}

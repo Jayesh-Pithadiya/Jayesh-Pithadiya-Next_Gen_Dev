@@ -1,0 +1,22 @@
+import java.util.ArrayList;
+
+class StudentDatabase {
+    private ArrayList<Student> students;
+
+    public StudentDatabase() {
+        students = new ArrayList<>();
+    }
+
+    public void addStudent(Student student) {
+        students.add(student);
+    }
+
+    public Student findStudent(String studentId) {
+        for (Student student : students) {
+            if (student.getStudentId().equalsIgnoreCase(studentId)) {
+                return student;
+            }
+        }
+        return null;
+    }
+}
